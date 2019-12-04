@@ -5,9 +5,6 @@ var express = require('express'),
 var app = express();
 
 
-var static = require('serve=static');
-app.use('/public', static(path.join(__dirname,'public')));
-
 app.use(function (req, res, next) {
     console.log('첫번째 미들에서 요청을 처리함');
     // res.redirect('http://google.co.kr');
