@@ -1,22 +1,34 @@
 var express = require('express'),
-    http = require('http');
+    http = require('http'),
+    path = require('path');
 
+var bodyParser = require('body-parser'),
+    static = require('serve-static');
 
 var app = express();
 
+app.set('port', process.env.PORT || 3000);
+
+app.use(bodyParser.urlencoded({
+    extended: false
+}));
+ 
+app.use(bodyParser.json());
+
+app.use('/public', static(path.join(__dirname, 'public')));
 
 app.use(function (req, res, next) {
     console.log('첫번째 미들에서 요청을 처리함');
     // res.redirect('http://google.co.kr');
 
-    var userAgent = req.header('User-Agent');
-    var paramName = req.query.name;
-    
-   // req.user = "mike";
-    res.writeHead('200', {        'Content-Type': 'text/html;charset=utf8'});
+    var paramId = req.body.id || req.query.id;
+    var paramPassword = req.body.password || req.query.password;
+
+    req.user = "mike";
+    res.writeHead('200', {        'Content-Type': 'text/html;charset=utf8' });
     res.write('<h1> Express ' + req.user + ' 합격을 축하드립니다 오호</h1>');
-    res.write('<div><p>User-Agent : ' + userAgent + '</p></div>');
-      res.write('<div><p>Param name : ' + paramName + '</p></div>');
+    res.write('<div><p>Param Id : ' + paramId + '</p></div>');
+    res.write('<div><p>Param Password : ' + paramPassword + '</p></div>');
     res.end();
     //  next();
 });
